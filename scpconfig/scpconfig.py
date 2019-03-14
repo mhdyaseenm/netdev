@@ -1,18 +1,23 @@
-from scp import SCPClient
-import paramiko
-import getpass
+"""Simple script that implements scp"""
 import os
-dir = 'config/'
-dst_filename = 'config_to_append'
+import sys
+import getpass
+import paramiko
+
+from scp import SCPClient
+
+
+dir = sys.argv[1]
+dst_filename = sys.argv[2]
 
 
 def scp_image(host,username,password,file):
-  ssh = paramiko.SSHClient()
-  ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-  ssh.connect(host, username=username, password=password, look_for_keys=False,allow_agent=False, timeout=20)
-  with SCPClient(ssh.get_transport()) as scp:
-      scp.put(file,dst_filename)
-      print "File Copied to "+host
+    ssh = paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(host, username=username, password=password, look_for_keys=False,allow_agent=False, timeout=20)
+    with SCPClient(ssh.get_transport()) as scp:
+        scp.put(file,dst_filename)
+        print "File Copied to "+host
 
 
 username=raw_input("Username:")
